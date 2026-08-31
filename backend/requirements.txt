@@ -1,0 +1,7 @@
+﻿fastapi
+uvicorn
+pydantic
+firebase-admin
+scikit-learn
+pandas
+python-dotenv
