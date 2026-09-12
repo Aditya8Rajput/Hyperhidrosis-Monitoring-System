@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, query, where, getDocs, limit, orderBy } from "firebase/firestore";
-import { db } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
+import { subscribeToEpisodes } from "../services/episodes";
 import type { Episode, AnalyticsSummary } from "../types";
 import {
   Activity,
@@ -31,28 +30,20 @@ export const Dashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      if (!user?.uid) return;
-      setLoading(true);
-      try {
-        const q = query(
-          collection(db, "episodes"),
-          where("userId", "==", user.uid),
-          orderBy("timestamp", "desc"),
-          limit(20)
-        );
+    if (!user?.uid) return;
+    setLoading(true);
 
-        const snapshot = await getDocs(q);
-        const list: Episode[] = [];
+    const unsubscribe = subscribeToEpisodes(
+      user.uid,
+      (list) => {
+        setEpisodes(list);
+
         const triggerCounts: Record<string, number> = {};
         const areaCounts: Record<string, number> = {};
         let totalSev = 0;
         let totalDur = 0;
 
-        snapshot.forEach((doc) => {
-          const data = doc.data() as Episode;
-          list.push({ ...data, id: doc.id });
-
+        list.forEach((data) => {
           totalSev += data.severity || 0;
           totalDur += data.durationMinutes || 0;
 
@@ -66,8 +57,6 @@ export const Dashboard: React.FC = () => {
           }
         });
 
-        setEpisodes(list);
-
         const count = list.length;
         if (count > 0) {
           const topTrig = Object.entries(triggerCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "None";
@@ -80,15 +69,22 @@ export const Dashboard: React.FC = () => {
             topTrigger: topTrig,
             topBodyArea: topArea,
           });
+        } else {
+          setSummary({
+            totalEpisodes: 0,
+            avgSeverity: 0,
+            avgDuration: 0,
+            topTrigger: "None",
+            topBodyArea: "None",
+          });
         }
-      } catch (err) {
-        console.warn("Could not fetch episodes for dashboard (demo mode or offline):", err);
-      } finally {
         setLoading(false);
-      }
-    };
+      },
+      () => setLoading(false),
+      20
+    );
 
-    fetchDashboardData();
+    return () => unsubscribe();
   }, [user]);
 
   return (

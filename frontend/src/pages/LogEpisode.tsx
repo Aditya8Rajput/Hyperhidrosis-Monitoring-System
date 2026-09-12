@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { logEpisode } from "../services/episodes";
 import type { BodyAreaOption, TriggerOption, ActivityOption } from "../types";
 import {
   Flame,
@@ -150,13 +149,13 @@ export const LogEpisode: React.FC = () => {
         trigger,
         stressLevel: Number(stressLevel),
         activity,
-        temperature: temperature ? Number(temperature) : null,
-        humidity: humidity ? Number(humidity) : null,
+        temperature: temperature ? Number(temperature) : undefined,
+        humidity: humidity ? Number(humidity) : undefined,
         notes: notes.trim() || "",
-        createdAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, "episodes"), episodeData);
+      const docRef = await logEpisode(episodeData);
+      console.log("Saved episode ID:", docRef.id);
 
       showToast(
         "success",

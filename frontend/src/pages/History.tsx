@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { collection, query, where, getDocs, orderBy, deleteDoc, doc } from "firebase/firestore";
-import { db } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { subscribeToEpisodes, removeEpisode } from "../services/episodes";
 import type { Episode } from "../types";
 import {
   History as HistoryIcon,
@@ -24,35 +23,26 @@ export const History: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterTrigger, setFilterTrigger] = useState<string>("All");
 
-  const fetchEpisodes = async () => {
+  useEffect(() => {
     if (!user?.uid) return;
     setLoading(true);
-    try {
-      const q = query(
-        collection(db, "episodes"),
-        where("userId", "==", user.uid),
-        orderBy("timestamp", "desc")
-      );
-      const snapshot = await getDocs(q);
-      const list: Episode[] = [];
-      snapshot.forEach((d) => list.push({ ...d.data(), id: d.id } as Episode));
-      setEpisodes(list);
-    } catch (err) {
-      console.warn("Could not fetch episodes:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    fetchEpisodes();
+    const unsubscribe = subscribeToEpisodes(
+      user.uid,
+      (list) => {
+        setEpisodes(list);
+        setLoading(false);
+      },
+      () => setLoading(false)
+    );
+
+    return () => unsubscribe();
   }, [user]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this episode record?")) return;
     try {
-      await deleteDoc(doc(db, "episodes", id));
-      setEpisodes((prev) => prev.filter((e) => e.id !== id));
+      await removeEpisode(id);
       showToast("info", "Deleted", "Episode removed from history.");
     } catch (err) {
       showToast("error", "Delete Failed", "Could not remove episode.");

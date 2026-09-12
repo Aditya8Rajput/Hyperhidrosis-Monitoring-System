@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
+import { subscribeToEpisodes } from "../services/episodes";
 import type { Episode } from "../types";
 import {
   BarChart3,
@@ -17,23 +16,19 @@ export const Analytics: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchAnalyticsData = async () => {
-      if (!user?.uid) return;
-      setLoading(true);
-      try {
-        const q = query(collection(db, "episodes"), where("userId", "==", user.uid));
-        const snapshot = await getDocs(q);
-        const list: Episode[] = [];
-        snapshot.forEach((d) => list.push(d.data() as Episode));
-        setEpisodes(list);
-      } catch (err) {
-        console.warn("Could not fetch analytics:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!user?.uid) return;
+    setLoading(true);
 
-    fetchAnalyticsData();
+    const unsubscribe = subscribeToEpisodes(
+      user.uid,
+      (list) => {
+        setEpisodes(list);
+        setLoading(false);
+      },
+      () => setLoading(false)
+    );
+
+    return () => unsubscribe();
   }, [user]);
 
   // Aggregate stats
