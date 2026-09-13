@@ -1,678 +1,309 @@
-\documentclass[11pt,a4paper]{article}
 
-% ---------------------------------------------------------
-% PACKAGES
-% ---------------------------------------------------------
-\usepackage[margin=1in]{geometry}
-\usepackage{enumitem}
-\usepackage{titlesec}
-\usepackage{setspace}
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
 \usepackage{xcolor}
-\usepackage{hyperref}
-\usepackage{parskip}
-\usepackage{array}
-\usepackage{booktabs}
-\usepackage{tabularx}
-\usepackage{fancyhdr}
-\usepackage{longtable}
-
-% ---------------------------------------------------------
-% PAGE SETTINGS
-% ---------------------------------------------------------
-\setstretch{1.08}
-
-\definecolor{titlecolor}{RGB}{55,55,55}
-
-\hypersetup{
-    colorlinks=true,
-    linkcolor=black,
-    urlcolor=blue
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
 }
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
 
-\pagestyle{fancy}
-\fancyhf{}
-\rhead{\thepage}
-\renewcommand{\headrulewidth}{0pt}
-\setlength{\headheight}{14pt}
+\author{}
+\date{}
 
-% ---------------------------------------------------------
-% SECTION FORMATTING
-% ---------------------------------------------------------
-\titleformat{\section}
-    {\large\bfseries}
-    {\thesection}
-    {0.5em}
-    {}
-
-\titleformat{\subsection}
-    {\normalsize\bfseries}
-    {\thesubsection}
-    {0.5em}
-    {}
-
-% ---------------------------------------------------------
-% DOCUMENT
-% ---------------------------------------------------------
 \begin{document}
 
-% =========================================================
-% TITLE
-% =========================================================
+\textbf{HYPERTRACK}
 
-\begin{center}
+\textbf{Hyperhidrosis Monitoring and Management System}
 
-{\LARGE \textbf{HyperTrack: Hyperhidrosis Monitoring and Management System}}
+\textbf{PROJECT PROPOSAL \textbar{} COURSE UCS503}
 
-\vspace{0.3cm}
+\textbf{Submitted to: Dr. Jeelani Asif}
 
-{\large Project Proposal for UCS503}
+\textbf{Submitted by}
 
-\vspace{0.5cm}
+\textbf{Aditya Rajput (1024240145) · AIML}
 
-Submitted to: Dr. Jeelani Asif
+\textbf{Prabhkirat Kaur (1024240024) · AIML}
 
-\vspace{0.2cm}
+\emph{August 2026}
 
-Thapar Institute of Engineering and Technology
+\textbf{Executive Overview}
 
-\vspace{0.5cm}
+HyperTrack is a proposed web-based monitoring and management system for
+recording, organizing, visualizing, and analyzing user-reported sweating
+episodes associated with hyperhidrosis. It is designed primarily as a
+Software Engineering project, with an optional AIML component for
+personalized pattern analysis and severity prediction. The system does
+not diagnose or treat hyperhidrosis; it helps users organize their own
+data and generate reports that can support conversations with healthcare
+professionals.
 
-\textbf{Aditya Rajput, AIML}
+\includegraphics[width=6.27083in,height=3.49765in,alt={8c60a8794a867875a246412ff0e3a2af.png}]{./media/image1.png}
 
-\textbf{Prabhkirat Kaur, AIML}
+\emph{Figure 1. Problem context and motivation for structured
+monitoring.}
 
-\vspace{0.3cm}
+\textbf{1. Problem Statement}
 
-August 2026
+Hyperhidrosis involves excessive sweating beyond normal temperature
+regulation, often affecting the palms, feet, underarms, and face. A key
+challenge is the lack of consistent records covering severity, duration,
+affected area, triggers, activity, and stress. HyperTrack addresses this
+gap by converting individual episodes into structured records that can
+be analyzed over time to reveal patterns that would otherwise be missed.
 
-\end{center}
+\textbf{2. Objectives}
 
-\vspace{0.3cm}
+The project aims to build a reliable, user-friendly system for recording
+and analyzing sweating episodes. Specific objectives include:
 
-% =========================================================
-% 1. INTRODUCTION / PROBLEM STATEMENT
-% =========================================================
-
-\section{Introduction / Problem Statement}
-
-Hyperhidrosis is a condition characterized by excessive sweating that
-can occur beyond what is necessary for normal temperature regulation.
-It may affect areas such as the palms, feet, underarms, and face, and
-can interfere with everyday activities, academic work, professional
-tasks, and social interactions.
-
-A major practical difficulty for individuals experiencing excessive
-sweating is the lack of a structured way to monitor their symptoms over
-time. Users may remember individual episodes but often do not maintain
-consistent records of the severity, duration, affected body area,
-possible triggers, activity, or stress level associated with each
-episode. As a result, it can be difficult to understand whether
-symptoms are becoming more or less frequent and which circumstances
-are commonly associated with episodes.
-
-The proposed project, \textbf{HyperTrack}, aims to address this
-problem through a software-based monitoring and management system.
-The system will allow users to record individual sweating episodes and
-store the information in a structured database. The collected data will
-then be processed to generate statistics, visual trends, and
-personalized observations.
-
-The system will not attempt to medically diagnose hyperhidrosis.
-Instead, it will function as a monitoring and decision-support tool
-that helps users organize their own recorded information. A report
-generation feature will also allow users to summarize their history in
-a structured format that can be discussed with a healthcare
-professional.
-
-From a Software Engineering perspective, the project provides a
-complete software development problem involving requirements analysis,
-system architecture, database design, user interface development,
-backend services, data analytics, testing, and future scalability.
-As an AIML project, the system can additionally incorporate machine
-learning for personalized pattern analysis and sweating-severity
-prediction.
-
-% =========================================================
-% 2. OBJECTIVES
-% =========================================================
-
-\section{Objectives}
-
-The primary objective of this project is to develop a reliable and
-user-friendly software system for recording, monitoring, and analyzing
-hyperhidrosis-related sweating episodes.
-
-The specific objectives are:
-
-\begin{itemize}[leftmargin=*]
-
-    \item To develop a user-friendly interface for recording sweating
-    episodes and their associated information.
-
-    \item To store symptom records in a structured and secure database.
-
-    \item To analyze sweating frequency, severity, duration, affected
-    body areas, and possible triggers.
-
-    \item To provide dashboards containing graphs, statistics, and
-    historical trends.
-
-    \item To allow users to maintain treatment or session records
-    without providing medical prescriptions.
-
-    \item To generate an organized report summarizing the user's
-    recorded history.
-
-    \item To investigate the use of machine learning for personalized
-    sweating-severity prediction and pattern identification.
-
-    \item To apply Software Engineering principles including
-    requirements analysis, modular architecture, database design,
-    testing, and iterative development.
-
+\begin{itemize}
+\item
+  Provide a user-friendly interface for recording episodes and
+  associated context.
+\item
+  Store symptom records in a structured, secure database.
+\item
+  Analyze frequency, severity, duration, affected body areas, and
+  possible triggers.
+\item
+  Deliver dashboards with graphs, statistics, and historical trends.
+\item
+  Support treatment/session tracking without issuing medical
+  prescriptions.
+\item
+  Generate an organized report summarizing recorded history.
+\item
+  Investigate machine learning for personalized severity prediction.
+\item
+  Apply sound Software Engineering practice across the development
+  lifecycle.
 \end{itemize}
 
-% =========================================================
-% 3. PROPOSED SOLUTION
-% =========================================================
+\textbf{3. Proposed Solution}
 
-\section{Proposed Solution}
+HyperTrack is proposed as a web application comprising user management,
+episode recording, structured data storage, an analytics module, an
+interactive dashboard, treatment/session tracking, report generation,
+and an optional machine learning module. The system is positioned as a
+monitoring and decision-support tool rather than a diagnostic system.
 
-We propose a web-based application named
-\textbf{HyperTrack: Hyperhidrosis Monitoring and Management System}.
+\includegraphics[width=6.27083in,height=2.60084in,alt={05156ca988e876ab6126ac51f2b3e0eb.png}]{./media/image2.png}
 
-The system will consist of the following major components:
+\emph{Figure 2. Eight functional modules forming the core application.}
 
-\begin{itemize}[leftmargin=*]
+\textbf{4. System Architecture}
 
-    \item \textbf{User Management:} Registration, authentication, and
-    profile management.
+The application follows a three-tier architecture. The presentation
+layer (HTML, CSS, JavaScript) delivers the user interface; the
+application layer (Python and Flask) exposes REST APIs and hosts
+analytics and machine learning services; and the data layer (MySQL)
+stores users, episodes, triggers, and treatment records. This separation
+keeps the system easier to test, maintain, and scale.
 
-    \item \textbf{Sweating Episode Recording:} Users can record
-    severity, duration, affected body area, activity, stress level,
-    and possible triggers.
+\includegraphics[width=6.27083in,height=2.6577in,alt={5365f1632a8974b5bc51e010177f7b7a.png}]{./media/image3.png}
 
-    \item \textbf{Data Storage:} All recorded information will be
-    stored in a structured relational database.
+\emph{Figure 3. Three-tier architecture with analytics and ML services.}
 
-    \item \textbf{Analytics Module:} The system will calculate
-    frequency, average severity, duration, trigger patterns, and
-    body-area statistics.
+\textbf{5. System Workflow}
 
-    \item \textbf{Dashboard:} Users will be provided with interactive
-    charts and summaries to understand their historical data.
+The core workflow begins with user login, followed by episode recording,
+input validation, and database storage. Historical records then pass
+through the analytics module to populate the dashboard, after which the
+optional machine learning module can add a severity insight before the
+user generates a structured monitoring report.
 
-    \item \textbf{Treatment Tracking:} Users can record treatment or
-    session information they are already following.
+\includegraphics[width=6.27083in,height=2.4872in,alt={6ef08654f60bc9433bc0bc45c9db534a.png}]{./media/image4.png}
 
-    \item \textbf{Report Generation:} The application will generate
-    a summarized report containing relevant historical information.
+\emph{Figure 4. End-to-end operational workflow.}
 
-    \item \textbf{Machine Learning Module:} An optional ML component
-    will analyze historical records and predict the likely severity
-    category of future recorded episodes.
+\textbf{6. Episode Data Collection}
 
-\end{itemize}
+Each recorded episode captures the date and time, sweating severity,
+duration, affected body area, activity, self-reported stress level,
+possible trigger, temperature and humidity where available, and any
+additional notes. This structured record forms the basis for both
+statistical analysis and future machine learning functionality.
 
-% =========================================================
-% 4. SYSTEM WORKFLOW
-% =========================================================
+\includegraphics[width=6.27083in,height=3.25221in,alt={7301f7432e847e18dc0c5fead7fde1be.png}]{./media/image5.png}
 
-\section{System Workflow}
+\emph{Figure 5. Structured data captured for each episode.}
 
-The core workflow of HyperTrack will follow these stages:
+\textbf{7. Data Processing and Analytics}
 
-\begin{enumerate}[leftmargin=*]
+Stored records are cleaned and processed to calculate daily and weekly
+frequency, average severity, average duration, frequently affected
+areas, commonly recorded triggers, severity trends, and associations
+between stress and severity. Results are presented as patterns or
+associations in the user\textquotesingle s recorded data rather than
+medical conclusions.
 
-    \item The user logs into the application.
+\includegraphics[width=6.27083in,height=1.65855in,alt={3c12c8a8d5b2e6c1de53d6db4292637f.png}]{./media/image6.png}
 
-    \item The user records a sweating episode.
+\emph{Figure 6. Analytics pipeline and derived metrics.}
 
-    \item The system validates the entered information.
+\textbf{8. Machine Learning Component}
 
-    \item The episode is stored in the database.
+As the AIML component, the project investigates supervised severity
+classification using features such as stress, temperature, humidity,
+activity, time of day, previous severity, duration, caffeine intake, and
+affected body area. Candidate algorithms include Logistic Regression,
+Decision Trees, and Random Forest, with Random Forest considered the
+initial model for its ability to handle multiple features and report
+feature importance. The output is a severity category of Low, Moderate,
+or High, offered strictly as a supplementary insight.
 
-    \item Historical records are processed by the analytics module.
+\includegraphics[width=6.27083in,height=1.67029in,alt={dd7ad37146d69adea1d5b481f2485a57.png}]{./media/image7.png}
 
-    \item The dashboard displays frequency, severity, and trigger
-    trends.
+\emph{Figure 7. Proposed machine learning pipeline.}
 
-    \item The optional machine learning module analyzes historical
-    patterns.
+\textbf{9. Testing and Validation}
 
-    \item The user can generate a structured monitoring report.
+Testing runs throughout development. Unit testing covers individual
+functions such as login, episode creation, and validation; integration
+testing verifies communication across the frontend, backend, database,
+and analytics modules; system testing validates the complete workflow
+from login through report generation; and user acceptance testing
+evaluates usability and clarity with selected users. If implemented, the
+ML module is evaluated using accuracy, precision, recall, F1-score, and
+a confusion matrix.
 
-\end{enumerate}
+\includegraphics[width=6.27083in,height=1.67029in,alt={e7b2ddc87890a40a37b374dfaf7459ad.png}]{./media/image8.png}
 
-The overall data flow can be represented as:
+\emph{Figure 8. Multi-level testing and validation strategy.}
 
-\begin{center}
-\textbf{User Input}
-$\rightarrow$
-\textbf{Episode Recording}
-$\rightarrow$
-\textbf{Database}
-$\rightarrow$
-\textbf{Data Analysis}
-$\rightarrow$
-\textbf{Dashboard}
-$\rightarrow$
-\textbf{Report}
-\end{center}
+\textbf{10. Technology Stack}
 
-% =========================================================
-% 5. METHODOLOGY
-% =========================================================
+The proposed stack relies primarily on free and open-source
+technologies: HTML/CSS/JavaScript for the frontend; Python, Flask, and
+REST APIs for the backend; MySQL, Pandas, and NumPy for data;
+Scikit-learn, Chart.js, and Matplotlib for machine learning and
+visualization; and Git/GitHub with VS Code or PyCharm for tooling and
+version control.
 
-\section{Methodology}
+\includegraphics[width=6.27083in,height=3.31131in,alt={0307d3ae3bd9f5084f0054af31b9f2a4.png}]{./media/image9.png}
 
-The methodology of HyperTrack will focus on software engineering,
-system development, data analysis, and testing. The project will be
-implemented iteratively so that the core monitoring functionality is
-completed before advanced analytics and machine learning features are
-introduced.
+\emph{Figure 9. Technology stack across the application.}
 
-\subsection{Requirements Analysis}
+\textbf{11. Development Timeline}
 
-The first phase will identify the functional and non-functional
-requirements of the system.
+Development spans a 15-week semester using an iterative approach,
+prioritizing core monitoring functionality before advanced analytics and
+machine learning features. A buffer period is maintained during the
+final development and testing stages to absorb unexpected technical
+issues.
 
-Functional requirements will include:
+\includegraphics[width=6.27083in,height=2.08in,alt={a0db15f41a6fb1a89481732076611b2e.png}]{./media/image10.png}
 
-\begin{itemize}[leftmargin=*]
+\emph{Figure 10. Semester development roadmap.}
 
-    \item User registration and authentication.
-    \item User profile management.
-    \item Recording sweating episodes.
-    \item Viewing historical records.
-    \item Dashboard generation.
-    \item Trigger and severity analysis.
-    \item Treatment/session tracking.
-    \item Report generation.
+\textbf{12. Resources and Budget}
 
-\end{itemize}
+The project is developed by two students. Aditya Rajput (AIML) leads
+backend development, database integration, machine learning, and system
+integration. Prabhkirat Kaur (AIML) leads frontend development, UI/UX,
+documentation, testing, and analytics integration. Both members
+participate in requirements analysis, system design, testing, and final
+documentation.
 
-Non-functional requirements will include:
+The software stack is built entirely on freely available or open-source
+tools --- Python, Flask, MySQL, Pandas, NumPy, Scikit-learn,
+HTML/CSS/JavaScript, Git/GitHub, and VS Code or PyCharm --- so no
+external funding is required for the initial implementation. Future
+cloud hosting or external services, if needed, may introduce additional
+costs.
 
-\begin{itemize}[leftmargin=*]
+\textbf{13. Risks and Mitigation}
 
-    \item Usability.
-    \item Reliability.
-    \item Data privacy.
-    \item Maintainability.
-    \item Scalability.
-    \item Acceptable response time.
+Key risks include limited data availability for the ML prototype,
+protection of sensitive health data, the possibility of medical
+misinterpretation, ML reliability, development delays, and user
+adoption. Each is addressed with a concrete mitigation strategy,
+summarized below.
 
-\end{itemize}
+\includegraphics[width=6.27083in,height=2.87823in,alt={68cbd3e5834a6f0cd49f40c28a4a332c.png}]{./media/image11.png}
 
-\subsection{System Architecture}
+\emph{Figure 11. Key project risks and mitigation strategies.}
 
-The application will use a three-tier architecture:
+\textbf{14. Expected Outcomes}
 
-\begin{enumerate}[leftmargin=*]
-
-    \item \textbf{Presentation Layer:} HTML, CSS, and JavaScript will
-    provide the user interface.
-
-    \item \textbf{Application Layer:} Python with Flask will provide
-    backend services and REST APIs.
-
-    \item \textbf{Data Layer:} MySQL will store users, episodes,
-    triggers, treatment records, and analytical information.
-
-\end{enumerate}
-
-This separation will make the system easier to test, maintain, and
-extend.
-
-\subsection{Episode Data Collection}
-
-Each sweating episode will contain structured information such as:
-
-\begin{itemize}[leftmargin=*]
-
-    \item Date and time.
-    \item Sweating severity.
-    \item Duration.
-    \item Affected body area.
-    \item Activity.
-    \item Self-reported stress level.
-    \item Possible trigger.
-    \item Temperature and humidity, where available.
-    \item Additional user notes.
-
-\end{itemize}
-
-The collected information will form the basis for both statistical
-analysis and future machine learning functionality.
-
-\subsection{Data Processing and Analytics}
-
-The stored records will be cleaned and processed before analysis.
-The system will calculate:
-
-\begin{itemize}[leftmargin=*]
-
-    \item Daily and weekly episode frequency.
-    \item Average sweating severity.
-    \item Average episode duration.
-    \item Most frequently affected body area.
-    \item Frequently recorded possible triggers.
-    \item Severity trends over time.
-    \item Associations between recorded stress levels and severity.
-
-\end{itemize}
-
-The results will be displayed using charts and summary statistics.
-
-The system will describe these results as patterns or associations in
-the user's recorded data rather than medical conclusions.
-
-\subsection{Machine Learning Component}
-
-As an AIML component, the project will investigate a supervised
-machine learning model for sweating-severity classification.
-
-Potential input features include:
-
-\begin{itemize}[leftmargin=*]
-
-    \item Stress level.
-    \item Temperature.
-    \item Humidity.
-    \item Activity level.
-    \item Time of day.
-    \item Previous severity.
-    \item Duration.
-    \item Caffeine intake.
-    \item Affected body area.
-
-\end{itemize}
-
-The target output will be a severity category:
-
-\begin{center}
-\textbf{Low \quad / \quad Moderate \quad / \quad High}
-\end{center}
-
-Candidate algorithms include Logistic Regression, Decision Trees, and
-Random Forest. Random Forest will be considered as the initial model
-because it can handle multiple input features and provide feature
-importance information.
-
-The ML component will be treated as a supplementary analytical
-feature and will not be presented as a medical diagnostic system.
-
-\subsection{Testing and Validation}
-
-Testing will be performed throughout the development process.
-
-\begin{itemize}[leftmargin=*]
-
-    \item \textbf{Unit Testing:} Individual functions such as login,
-    episode creation, and data validation will be tested.
-
-    \item \textbf{Integration Testing:} Communication between the
-    frontend, backend, database, and analytics modules will be tested.
-
-    \item \textbf{System Testing:} The complete user workflow will be
-    tested from login through report generation.
-
-    \item \textbf{User Acceptance Testing:} Selected users will
-    evaluate the usability and clarity of the application.
-
-    \item \textbf{ML Evaluation:} If the ML module is implemented,
-    accuracy, precision, recall, F1-score, and confusion matrix will
-    be used for evaluation.
-
-\end{itemize}
-
-% =========================================================
-% 6. TECHNOLOGY STACK
-% =========================================================
-
-\section{Technology Stack}
-
-The proposed technology stack is:
-
-\begin{center}
-\begin{tabular}{>{\bfseries}p{4cm} p{8cm}}
-\toprule
-Component & Technology \\
-\midrule
-Frontend & HTML, CSS, JavaScript \\
-Backend & Python, Flask, REST API \\
-Database & MySQL \\
-Data Processing & Python, Pandas, NumPy \\
-Machine Learning & Scikit-learn \\
-Visualization & Chart.js / Matplotlib \\
-Testing & Python testing framework \\
-Version Control & Git and GitHub \\
-Development Environment & VS Code / PyCharm \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-% =========================================================
-% 7. TIMELINE
-% =========================================================
-
-\section{Timeline}
-
-The project will be developed over the semester using an iterative
-development approach.
-
-\begin{center}
-\renewcommand{\arraystretch}{1.25}
-
-\begin{tabularx}{\textwidth}{>{\bfseries}p{2cm} X X}
-\toprule
-Week & Task & Deliverable \\
-\midrule
-
-1--2 &
-Requirement analysis and problem study &
-SRS and requirement specification \\
-
-3--4 &
-System architecture and database design &
-Architecture, ER diagram, UML diagrams \\
-
-5--6 &
-Frontend and authentication &
-Initial working interface \\
-
-7--8 &
-Episode recording and database integration &
-Core monitoring module \\
-
-9--10 &
-Dashboard and data analytics &
-Charts, statistics, and trend analysis \\
-
-11 &
-Treatment/session tracking and reports &
-Report generation module \\
-
-12 &
-Machine learning investigation and integration &
-Severity prediction prototype \\
-
-13 &
-Integration and system testing &
-Test results and bug fixes \\
-
-14 &
-User acceptance testing and refinement &
-Validated prototype \\
-
-15 &
-Documentation and final presentation &
-Final report and presentation \\
-
-\bottomrule
-\end{tabularx}
-\end{center}
-
-A buffer period will be maintained during the final development and
-testing stages to accommodate unexpected technical issues.
-
-% =========================================================
-% 8. RESOURCES AND BUDGET
-% =========================================================
-
-\section{Resources / Budget}
-
-\subsection{Human Resources}
-
-The project will be developed by two students:
-
-\begin{itemize}[leftmargin=*]
-
-    \item \textbf{Aditya Rajput (AIML):} Backend development,
-    database integration, machine learning, and system integration.
-
-    \item \textbf{Prabhkeerat Kaur (AIML):} Frontend development,
-    UI/UX, documentation, testing, and analytics integration.
-
-\end{itemize}
-
-Both members will participate in requirements analysis, system design,
-testing, and final documentation.
-
-\subsection{Software Resources}
-
-The project will primarily use freely available or open-source
-software:
-
-\begin{itemize}[leftmargin=*]
-
-    \item Python.
-    \item Flask.
-    \item MySQL.
-    \item Pandas and NumPy.
-    \item Scikit-learn.
-    \item HTML, CSS, and JavaScript.
-    \item Git and GitHub.
-    \item VS Code / PyCharm.
-
-\end{itemize}
-
-\subsection{Budget}
-
-No external funding is required for the initial implementation. The
-software tools and development environments required for the project
-are freely available or accessible through the university.
-
-Future cloud hosting or external services, if required, may introduce
-additional costs.
-
-% =========================================================
-% 9. RISKS AND MITIGATION
-% =========================================================
-
-\section{Risks and Mitigation}
-
-\begin{itemize}[leftmargin=*]
-
-    \item \textbf{Limited data availability:} Initial development
-    may use an appropriate public or synthetic dataset for the ML
-    prototype. Future improvements can use additional anonymized data
-    subject to appropriate consent and privacy requirements.
-
-    \item \textbf{Data privacy:} Only necessary information will be
-    collected, and user data will be protected through authentication
-    and appropriate database security practices.
-
-    \item \textbf{Medical interpretation:} The application will not
-    claim to diagnose or treat hyperhidrosis. It will focus on
-    monitoring, organization, and analysis of user-recorded data.
-
-    \item \textbf{ML reliability:} Machine learning predictions will
-    be treated as supplementary insights rather than medical advice.
-
-    \item \textbf{Development delays:} The project will use an
-    iterative development strategy, prioritizing the core monitoring
-    functionality before advanced ML features.
-
-    \item \textbf{User adoption:} The episode recording process will
-    be designed to require minimal effort from the user.
-
-\end{itemize}
-
-% =========================================================
-% 10. EXPECTED OUTCOMES
-% =========================================================
-
-\section{Expected Outcomes}
-
-At the end of the project, the expected outcome is a functional web
-application that enables users to:
-
-\begin{itemize}[leftmargin=*]
-
-    \item Maintain a structured record of sweating episodes.
-
-    \item View their historical sweating data.
-
-    \item Understand frequency and severity trends.
-
-    \item Identify commonly recorded possible triggers.
-
-    \item Track treatment or session history.
-
-    \item Generate an organized monitoring report.
-
-    \item Receive optional ML-based personalized severity insights.
-
-\end{itemize}
-
-From a Software Engineering perspective, the project will demonstrate
-the application of requirements engineering, system architecture,
+At completion, HyperTrack is expected to be a functional web application
+that lets users maintain structured episode records, understand
+frequency and severity trends, identify common triggers, track treatment
+history, and generate an organized monitoring report --- with optional
+ML-based severity insight. From a Software Engineering standpoint, the
+project demonstrates requirements engineering, system architecture,
 database management, modular development, testing, and iterative
-software development.
+delivery.
 
-% =========================================================
-% 11. SUMMARY
-% =========================================================
+\includegraphics[width=6.27083in,height=2.31442in,alt={ba6138c4416f03f5d67e1921ef8d486d.png}]{./media/image12.png}
 
-\section{Summary}
+\emph{Figure 12. Expected project outcomes.}
 
-HyperTrack is proposed as a software-based monitoring and management
-system for individuals experiencing hyperhidrosis-related excessive
-sweating.
+\textbf{Clinical Scope Note}
 
-The system addresses the lack of structured symptom monitoring by
-allowing users to record sweating episodes and associated contextual
-information. The collected data will be stored, processed, visualized,
-and converted into organized reports.
+HyperTrack is a monitoring and decision-support system. Its analytics
+and ML outputs are supplementary insights drawn from user-recorded data
+--- they are not medical diagnosis, treatment recommendations, or
+medical advice.
 
-The project is primarily a Software Engineering system, with an AIML
-component introduced for personalized data analysis and severity
-prediction. The development process will emphasize requirements,
-architecture, modular implementation, testing, usability, privacy,
-and scalability.
+Aditya Rajput --- Roll No. 1024240145 --- arajput\_be24@thapar.edu
 
-The project therefore combines a real-world healthcare-related problem
-with practical Software Engineering and Artificial Intelligence and
-Machine Learning techniques.
-
-% =========================================================
-% MEMBER DETAILS
-% =========================================================
-
-\vfill
-
-\noindent
-\textbf{Aditya Rajput} \quad
-Roll No: \textbf{1024240145} \quad
-Email: \texttt{arajput\_be24@thapar.edu}
-
-\vspace{0.15cm}
-
-\noindent
-\textbf{Prabhkirat Kaur} \quad
-Roll No: \textbf{1024240024} \quad
-Email: \texttt{pkaur2\_be24@thapar.edu}
+Prabhkirat Kaur --- Roll No. 1024240024 --- pkaur2\_be24@thapar.edu
 
 \end{document}
