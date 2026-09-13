@@ -1,0 +1,112 @@
+site_name: "HyperTrack : Hyperhidrosis Monitoring & Management System"
+site_url: https://aditya8rajput.github.io/Hyperhidrosis-Monitoring-System/
+
+plugins:
+  - search
+  - section-index
+
+theme:
+  name: material
+  custom_dir: assets/theme-overrides
+  features:
+    - navigation.footer
+    - header.autohide
+    - content.tabs.link
+    - navigation.tracking
+    - navigation.top
+    - toc.integrate
+    - content.tooltips
+  icon:
+    repo: fontawesome/brands/github
+    annotation: material/plus-circle-outline
+  palette:
+    primary: light-blue
+    accent: cyan
+  logo: assets/tiet-logo.svg
+  favicon: assets/favicon.png
+
+repo_url: https://github.com/simi-835/Hyperhindrosis
+repo_name: simi-835/Hyperhindrosis
+copyright: "Copyright &copy; 2026 Prabhkirat Kaur &amp; Aditya Rajput | UCS503 Software Engineering, TIET Patiala"
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/simi-835/Hyperhindrosis
+      name: HyperTrack GitHub Repository
+
+extra_css:
+  - assets/stylesheets/extra.css
+  - https://unpkg.com/katex@0/dist/katex.min.css
+
+extra_javascript:
+  - https://unpkg.com/katex@0/dist/katex.min.js
+
+markdown_extensions:
+  - abbr
+  - md_in_html
+  - attr_list
+  - toc:
+      permalink: true
+      toc_depth: 4
+  - footnotes
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - sane_lists
+
+nav:
+  - Overview: index.md
+  - Project Selection Criteria: criteria-for-project-selection.md
+  - Specifications:
+      - Problem Statement: problem-statement.md
+      - Software Requirements (SRS): srs.md
+      - System Design: system-design.md
+      - AIML Severity Module: aiml.md
+  - Testing & QA: testing.md
+  - Architectural Diagrams:
+      - DFD Level 0 (Context): diagrams/DFD_level0.svg
+      - DFD Level 1 (Decomposition): diagrams/DFD_level1.svg
+      - DFD Level 2 (Episode): diagrams/DFD_level2_episode.svg
+      - DFD Level 2 (Analytics): diagrams/DFD_level2_analytics.svg
+      - Use Case Diagram: diagrams/UseCaseDiagram.svg
+      - Activity Diagram: diagrams/ActivityDiagram.svg
+      - ER Diagram: diagrams/ER_diagram.svg
+      - Gantt Chart: diagrams/GanttChart.svg
+      - System Architecture: diagrams/SystemArchitecture.svg
+      - Sequence Diagram: diagrams/SequenceDiagram.svg
+      - Class Diagram: diagrams/ClassDiagram.svg
+      - Component & Deployment: diagrams/ComponentDeployment.svg
+  - Journals:
+      - Prabhkirat Kaur:
+          - Overview: journals/1024240024-Prabhkirat_Kaur/index.md
+          - Week 1: journals/1024240024-Prabhkirat_Kaur/Week_01.md
+          - Week 2: journals/1024240024-Prabhkirat_Kaur/Week_02.md
+          - Week 3: journals/1024240024-Prabhkirat_Kaur/Week_03.md
+          - Week 4: journals/1024240024-Prabhkirat_Kaur/Week_04.md
+          - Week 5: journals/1024240024-Prabhkirat_Kaur/Week_05.md
+          - Week 6: journals/1024240024-Prabhkirat_Kaur/Week_06.md
+      - Aditya Rajput:
+          - Overview: journals/1024240145-Aditya_Rajput/index.md
+          - Week 1: journals/1024240145-Aditya_Rajput/Week_01.md
+          - Week 2: journals/1024240145-Aditya_Rajput/Week_02.md
+          - Week 3: journals/1024240145-Aditya_Rajput/Week_03.md
+          - Week 4: journals/1024240145-Aditya_Rajput/Week_04.md
+          - Week 5: journals/1024240145-Aditya_Rajput/Week_05.md
+          - Week 6: journals/1024240145-Aditya_Rajput/Week_06.md

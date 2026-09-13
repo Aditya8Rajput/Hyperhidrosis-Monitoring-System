@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hypertrack"
+version = "0.1.0"
+description = "Hyperhidrosis Monitoring & Management System (UCS503 Software Engineering)"
+readme = "README.md"
+authors = [
+    { name = "Prabhkirat Kaur", email = "pkaur_be24@thapar.edu" },
+    { name = "Aditya Rajput", email = "arajput_be24@thapar.edu" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "scikit-learn>=1.3.0",
+    "reportlab>=4.0.0",
+    "streamlit>=1.30.0",
+    "pydantic>=2.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "flake8>=6.0.0",
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocs-section-index>=0.1.0"
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --import-mode=importlib"
+testpaths = ["code/tests"]
+pythonpath = ["code"]
